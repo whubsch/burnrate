@@ -54,7 +54,9 @@ export function CostCalculation({ result }: CostCalculationProps) {
                     <span className="font-mono">{item.count}</span>
                   </td>
                   <td className="text-right p-2">
-                    <span className="font-mono">${item.rate.toFixed(2)}</span>
+                    <span className="font-mono">
+                      {formatCurrency(item.rate)}
+                    </span>
                   </td>
                   <td className="text-right p-2">
                     <span className="font-mono">

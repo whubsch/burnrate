@@ -1,8 +1,10 @@
 import { Button } from "@heroui/button";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import { Chip } from "@heroui/chip";
 
 import MinusIcon from "../assets/minus.svg";
 import PlusIcon from "../assets/plus.svg";
+import { formatCurrency } from "../utils/format";
 
 import { TrashIcon } from "./icons/TrashIcon";
 
@@ -27,13 +29,11 @@ export function AttendeeCard({
 }: AttendeeCardProps) {
   return (
     <Card className="w-full">
-      <CardHeader className="justify-between">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-md font-semibold text-primary-800">
-            {getSeniorityTitle(seniority)}
-          </h3>
-          <p className="text-small text-default-500">${hourlyRate}/hr</p>
-        </div>
+      <CardHeader className="justify-between px-4">
+        <h3 className="text-lg font-semibold">
+          {getSeniorityTitle(seniority)}
+        </h3>
+        <Chip variant="flat">{formatCurrency(hourlyRate)}/hr</Chip>
       </CardHeader>
       <CardBody>
         <div className="flex items-center justify-between">
@@ -46,7 +46,7 @@ export function AttendeeCard({
           >
             <img alt="minus" className="w-4 h-4" src={MinusIcon} />
           </Button>
-          <span className="text-lg font-bold mx-4">{count}</span>
+          <span className="text-2xl mx-4">{count}</span>
           <Button
             isIconOnly
             color="default"
