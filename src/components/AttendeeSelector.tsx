@@ -115,13 +115,13 @@ export function AttendeeSelector({
   };
 
   return (
-    <div className="space-y-4">
+    <Card className="space-y-4 p-4">
       <h2 className="text-xl font-bold">Attendees</h2>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 items-center justify-center">
         <Dropdown>
           <DropdownTrigger>
-            <Button variant="bordered">
+            <Button size="lg" variant="bordered">
               {getSeniorityTitle(selectedSeniority)}
             </Button>
           </DropdownTrigger>
@@ -132,7 +132,7 @@ export function AttendeeSelector({
             onAction={(key) => setSelectedSeniority(key as string)}
           >
             {salaryData.map((salary) => (
-              <DropdownItem key={salary.level}>
+              <DropdownItem key={salary.level} textValue={salary.title}>
                 {salary.title} (${salary.hourlyRate}/hr)
               </DropdownItem>
             ))}
@@ -140,21 +140,26 @@ export function AttendeeSelector({
         </Dropdown>
 
         <Input
-          className="w-24"
+          className="w-24 h-12"
           label="Count"
           min={1}
+          size="sm"
           type="number"
           value={attendeeCount.toString()}
           onChange={(e) => setAttendeeCount(parseInt(e.target.value) || 1)}
         />
 
         <Button color="primary" onPress={addAttendees}>
-          Add Attendees
+          Add
         </Button>
       </div>
-
+      {attendees.length === 0 && (
+        <span className="text-default-500 text-sm">
+          Add attendees to calculate cost
+        </span>
+      )}
       {attendees.length > 0 && (
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 border rounded bg-default-50">
           {attendees.map((attendee) => {
             const salaryInfo = salaryData.find(
               (s) => s.level === attendee.seniority,
@@ -176,27 +181,23 @@ export function AttendeeSelector({
                   <div className="flex items-center justify-between">
                     <Button
                       isIconOnly
-                      color="primary"
+                      color="default"
                       isDisabled={attendee.count <= 1}
                       variant="light"
                       onPress={() => decrementAttendeeCount(attendee.seniority)}
                     >
-                      <img
-                        alt="minus"
-                        className="w-6 h-6 text-primary-500"
-                        src={MinusIcon}
-                      />
+                      <img alt="minus" className="w-4 h-4" src={MinusIcon} />
                     </Button>
                     <span className="text-lg font-bold mx-4">
                       {attendee.count}
                     </span>
                     <Button
                       isIconOnly
-                      color="primary"
+                      color="default"
                       variant="light"
                       onPress={() => incrementAttendeeCount(attendee.seniority)}
                     >
-                      <img alt="plus" className="w-6 h-6" src={PlusIcon} />
+                      <img alt="plus" className="w-4 h-4" src={PlusIcon} />
                     </Button>
                   </div>
                 </CardBody>
@@ -204,6 +205,7 @@ export function AttendeeSelector({
                   <Button
                     fullWidth
                     color="danger"
+                    size="sm"
                     variant="flat"
                     onPress={() => updateAttendeeCount(attendee.seniority, 0)}
                   >
@@ -219,6 +221,6 @@ export function AttendeeSelector({
           })}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

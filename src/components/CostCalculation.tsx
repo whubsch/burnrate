@@ -1,4 +1,7 @@
-import { Button } from "@heroui/button";
+import { useState } from "react";
+import { Chip } from "@heroui/chip";
+import { Card } from "@heroui/card";
+import { Switch } from "@heroui/switch";
 
 import { CalculationResult } from "../types";
 
@@ -7,48 +10,70 @@ interface CostCalculationProps {
 }
 
 export function CostCalculation({ result }: CostCalculationProps) {
+  const [showBreakdown, setShowBreakdown] = useState(false);
+
   if (!result) {
     return null;
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold">Cost</h2>
-
-      <div className="p-4 border rounded bg-gray-50">
-        <div className="text-2xl font-bold text-center mb-4">
-          <Button disabled color="success" size="lg" variant="flat">
-            ${result.totalCost.toLocaleString("en-US")}
-          </Button>
+    <Card className="space-y-4 p-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Cost</h2>
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Show Breakdown</span>
+          <Switch isSelected={showBreakdown} onValueChange={setShowBreakdown} />
         </div>
-
-        {result.breakdown.length > 0 && (
-          <div>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Seniority</th>
-                  <th className="text-right p-2">Count</th>
-                  <th className="text-right p-2">Rate ($/hr)</th>
-                  <th className="text-right p-2">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.breakdown.map((item, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="p-2">{item.seniority}</td>
-                    <td className="text-right p-2">{item.count}</td>
-                    <td className="text-right p-2">${item.rate.toFixed(2)}</td>
-                    <td className="text-right p-2">
-                      ${item.subtotal.toLocaleString("en-US")}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
-    </div>
+
+      <div className="text-center mb-4">
+        <Chip className="h-14" color="success" size="lg" variant="flat">
+          <span className="text-2xl m-1">
+            $
+            {result.totalCost.toLocaleString("en-US", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </span>
+        </Chip>
+      </div>
+
+      {showBreakdown && result.breakdown.length > 0 && (
+        <div className="p-4 border rounded bg-default-50">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left p-2">Seniority</th>
+                <th className="text-right p-2">Count</th>
+                <th className="text-right p-2">Rate ($/hr)</th>
+                <th className="text-right p-2">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result.breakdown.map((item, index) => (
+                <tr key={index} className="border-b">
+                  <td className="p-2">{item.seniority}</td>
+                  <td className="text-right p-2">
+                    <span className="font-mono">{item.count}</span>
+                  </td>
+                  <td className="text-right p-2">
+                    <span className="font-mono">${item.rate.toFixed(2)}</span>
+                  </td>
+                  <td className="text-right p-2">
+                    <span className="font-mono">
+                      $
+                      {item.subtotal.toLocaleString("en-US", {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </Card>
   );
 }
