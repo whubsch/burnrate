@@ -7,13 +7,12 @@ import {
   DropdownItem,
 } from "@heroui/dropdown";
 import { Input } from "@heroui/input";
-import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import { Card } from "@heroui/card";
 
 import { MeetingAttendee } from "../types";
 import { salaryData } from "../data/salaryData";
-import TrashIcon from "../assets/trash.svg";
-import PlusIcon from "../assets/plus.svg";
-import MinusIcon from "../assets/minus.svg";
+
+import { AttendeeCard } from "./AttendeeCard";
 
 interface AttendeeSelectorProps {
   attendees: MeetingAttendee[];
@@ -30,13 +29,11 @@ export function AttendeeSelector({
   const [attendeeCount, setAttendeeCount] = useState(1);
 
   const addAttendees = () => {
-    // Check if there's already an entry with the same seniority
     const existingIndex = attendees.findIndex(
       (a) => a.seniority === selectedSeniority,
     );
 
     if (existingIndex >= 0) {
-      // Update existing entry
       const updatedAttendees = [...attendees];
 
       updatedAttendees[existingIndex] = {
@@ -45,7 +42,6 @@ export function AttendeeSelector({
       };
       onUpdate(updatedAttendees);
     } else {
-      // Add new entry
       onUpdate([
         ...attendees,
         {
@@ -55,7 +51,6 @@ export function AttendeeSelector({
       ]);
     }
 
-    // Reset count to 1
     setAttendeeCount(1);
   };
 
@@ -64,12 +59,10 @@ export function AttendeeSelector({
     const index = updatedAttendees.findIndex((a) => a.seniority === seniority);
 
     if (count <= 0) {
-      // Remove the entry if count is 0 or negative
       if (index >= 0) {
         updatedAttendees.splice(index, 1);
       }
     } else if (index >= 0) {
-      // Update existing entry
       updatedAttendees[index].count = count;
     }
 
@@ -166,57 +159,16 @@ export function AttendeeSelector({
             );
 
             return (
-              <Card key={attendee.seniority} className="w-full">
-                <CardHeader className="justify-between">
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-md font-semibold text-primary-800">
-                      {getSeniorityTitle(attendee.seniority)}
-                    </h3>
-                    <p className="text-small text-default-500">
-                      ${salaryInfo?.hourlyRate}/hr
-                    </p>
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <div className="flex items-center justify-between">
-                    <Button
-                      isIconOnly
-                      color="default"
-                      isDisabled={attendee.count <= 1}
-                      variant="light"
-                      onPress={() => decrementAttendeeCount(attendee.seniority)}
-                    >
-                      <img alt="minus" className="w-4 h-4" src={MinusIcon} />
-                    </Button>
-                    <span className="text-lg font-bold mx-4">
-                      {attendee.count}
-                    </span>
-                    <Button
-                      isIconOnly
-                      color="default"
-                      variant="light"
-                      onPress={() => incrementAttendeeCount(attendee.seniority)}
-                    >
-                      <img alt="plus" className="w-4 h-4" src={PlusIcon} />
-                    </Button>
-                  </div>
-                </CardBody>
-                <CardFooter>
-                  <Button
-                    fullWidth
-                    color="danger"
-                    size="sm"
-                    variant="flat"
-                    onPress={() => updateAttendeeCount(attendee.seniority, 0)}
-                  >
-                    <img
-                      alt="trash"
-                      className="w-6 h-6 fill-red-500"
-                      src={TrashIcon}
-                    />
-                  </Button>
-                </CardFooter>
-              </Card>
+              <AttendeeCard
+                key={attendee.seniority}
+                count={attendee.count}
+                getSeniorityTitle={getSeniorityTitle}
+                hourlyRate={salaryInfo?.hourlyRate || 0}
+                seniority={attendee.seniority}
+                onDecrement={() => decrementAttendeeCount(attendee.seniority)}
+                onIncrement={() => incrementAttendeeCount(attendee.seniority)}
+                onRemove={() => updateAttendeeCount(attendee.seniority, 0)}
+              />
             );
           })}
         </div>

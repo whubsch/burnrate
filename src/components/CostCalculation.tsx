@@ -4,6 +4,7 @@ import { Card } from "@heroui/card";
 import { Switch } from "@heroui/switch";
 
 import { CalculationResult } from "../types";
+import { formatCurrency } from "../utils/format";
 
 interface CostCalculationProps {
   result: CalculationResult | null;
@@ -29,11 +30,7 @@ export function CostCalculation({ result }: CostCalculationProps) {
       <div className="text-center mb-4">
         <Chip className="h-14" color="success" size="lg" variant="flat">
           <span className="text-2xl m-1">
-            $
-            {result.totalCost.toLocaleString("en-US", {
-              maximumFractionDigits: 2,
-              minimumFractionDigits: 2,
-            })}
+            {formatCurrency(result.totalCost)}
           </span>
         </Chip>
       </div>
@@ -61,11 +58,7 @@ export function CostCalculation({ result }: CostCalculationProps) {
                   </td>
                   <td className="text-right p-2">
                     <span className="font-mono">
-                      $
-                      {item.subtotal.toLocaleString("en-US", {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
+                      {formatCurrency(item.subtotal)}
                     </span>
                   </td>
                 </tr>

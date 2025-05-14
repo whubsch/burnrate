@@ -1,7 +1,10 @@
 import { Button, ButtonGroup } from "@heroui/button";
-import { Chip } from "@heroui/chip";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
+
+import { TimerDisplay } from "./TimerDisplay";
+import { TimerIcon } from "./icons/TimerIcon";
+import { CursorIcon } from "./icons/CursorIcon";
 
 interface MeetingDurationProps {
   manualDuration: number;
@@ -24,11 +27,6 @@ export function MeetingDuration({
   durationMode,
   onChangeDurationMode,
 }: MeetingDurationProps) {
-  // Convert timerDuration to hours, minutes, seconds
-  const hours = Math.floor(timerDuration);
-  const minutes = Math.floor((timerDuration % 1) * 60);
-  const seconds = Math.floor((((timerDuration % 1) * 60) % 1) * 60);
-
   return (
     <Card className="space-y-2 p-4">
       <div className="flex justify-between items-center">
@@ -39,41 +37,13 @@ export function MeetingDuration({
             color={durationMode === "timer" ? "primary" : "default"}
             onPress={() => onChangeDurationMode("timer")}
           >
-            <svg
-              className={`w-5 h-5 ${durationMode === "timer" ? "stroke-white" : "stroke-black"}`}
-              fill="none"
-              height="800"
-              viewBox="0 0 24 24"
-              width="800"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4.516 7A9 9 0 1 0 12 3v3m0 6L8 8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-            </svg>
+            <TimerIcon isSelected={durationMode === "timer"} />
           </Button>
           <Button
             color={durationMode === "manual" ? "primary" : "default"}
             onPress={() => onChangeDurationMode("manual")}
           >
-            <svg
-              className={`w-5 h-5 ${durationMode === "manual" ? "stroke-white" : "stroke-black"}`}
-              fill="none"
-              height="800"
-              viewBox="0 0 24 24"
-              width="800"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 7v10m0-10a4 4 0 0 0-4-4H7m5 4a4 4 0 0 1 4-4h1m-5 14a4 4 0 0 1-4 4H7m5-4a4 4 0 0 0 4 4h1m-8-9h6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-            </svg>
+            <CursorIcon isSelected={durationMode === "manual"} />
           </Button>
         </ButtonGroup>
       </div>
@@ -100,19 +70,7 @@ export function MeetingDuration({
       ) : (
         <div className="flex flex-col items-center gap-4 min-h-28">
           <div className="flex items-center justify-center gap-2">
-            <Chip
-              className="font-mono text-2xl h-12 text-center"
-              variant="bordered"
-            >
-              {hours ? (
-                <>
-                  {hours.toString().padStart(2, "0")}
-                  <span className="text-lg">:</span>
-                </>
-              ) : null}
-              {minutes.toString().padStart(2, "0")}:
-              {seconds.toString().padStart(2, "0")}
-            </Chip>
+            <TimerDisplay timerDuration={timerDuration} />
           </div>
 
           <div className="flex gap-2">
