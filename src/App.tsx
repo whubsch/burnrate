@@ -106,9 +106,20 @@ function App() {
           <div className="col-span-2 row-start-2 mb-4">
             <CostCalculation result={calculationResult} />
           </div>
-          <h3 className="text-md text-default-400">
+          <h3 className="text-sm text-default-400">
             Estimated cost will always be less than actual cost because it does
             not account for overtime, step level, bonus pay, or other factors.
+            The data is based on Washington DC locality pay rates for 2025.
+            Contribute to the project{" "}
+            <a
+              className="text-primary-500"
+              href="https://github.com/whubsch/burnrate"
+              rel="noreferrer"
+              target="_blank"
+            >
+              on GitHub
+            </a>
+            .
           </h3>
         </div>
       </div>

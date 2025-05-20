@@ -2,11 +2,11 @@ import { Button } from "@heroui/button";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 
-import MinusIcon from "../assets/minus.svg";
-import PlusIcon from "../assets/plus.svg";
 import { formatCurrency } from "../utils/format";
 
 import { TrashIcon } from "./icons/TrashIcon";
+import { PlusIcon } from "./icons/PlusIcon";
+import { MinusIcon } from "./icons/MinusIcon";
 
 interface AttendeeCardProps {
   seniority: string;
@@ -41,19 +41,19 @@ export function AttendeeCard({
             isIconOnly
             color="default"
             isDisabled={count <= 1}
-            variant="light"
+            variant="flat"
             onPress={onDecrement}
           >
-            <img alt="minus" className="w-4 h-4" src={MinusIcon} />
+            <MinusIcon className="w-6 h-6" />
           </Button>
           <span className="text-2xl mx-4">{count}</span>
           <Button
             isIconOnly
             color="default"
-            variant="light"
+            variant="flat"
             onPress={onIncrement}
           >
-            <img alt="plus" className="w-4 h-4" src={PlusIcon} />
+            <PlusIcon className="w-6 h-6" />
           </Button>
         </div>
       </CardBody>
@@ -65,7 +65,7 @@ export function AttendeeCard({
           variant="flat"
           onPress={onRemove}
         >
-          <TrashIcon className="w-5 h-5" />
+          <TrashIcon className="w-6 h-6" />
         </Button>
       </CardFooter>
     </Card>

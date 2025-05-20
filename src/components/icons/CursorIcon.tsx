@@ -9,19 +9,12 @@ export function CursorIcon({
 }: CursorIconProps) {
   return (
     <svg
-      className={`w-5 h-5 ${isSelected ? "stroke-white" : "stroke-black"} ${className}`}
-      fill="none"
-      height="800"
-      viewBox="0 0 24 24"
-      width="800"
-      xmlns="http://www.w3.org/2000/svg"
+      className={`w-6 h-6 ${isSelected ? "fill-white" : "fill-black"} ${className}`}
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
     >
-      <path
-        d="M12 7v10m0-10a4 4 0 0 0-4-4H7m5 4a4 4 0 0 1 4-4h1m-5 14a4 4 0 0 1-4 4H7m5-4a4 4 0 0 0 4 4h1m-8-9h6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
+      <path d="M160-200q-33 0-56.5-23.5T80-280v-400q0-33 23.5-56.5T160-760h640q33 0 56.5 23.5T880-680v400q0 33-23.5 56.5T800-200H160Zm0-80h640v-400H160v400Zm160-40h320v-80H320v80ZM200-440h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80ZM200-560h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80Zm120 0h80v-80h-80v80ZM160-280v-400 400Z" />
     </svg>
   );
 }

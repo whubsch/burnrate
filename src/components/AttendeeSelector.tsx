@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { Button } from "@heroui/button";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/dropdown";
+import { Select, SelectItem } from "@heroui/select";
 import { Input } from "@heroui/input";
 import { Card } from "@heroui/card";
+import { Chip } from "@heroui/chip";
 
 import { MeetingAttendee } from "../types";
 import { salaryData } from "../data/salaryData";
+import { formatCurrency } from "../utils/format";
 
 import { AttendeeCard } from "./AttendeeCard";
+import { UserIcon } from "./icons/UserIcon";
 
 interface AttendeeSelectorProps {
   attendees: MeetingAttendee[];
@@ -23,12 +21,14 @@ export function AttendeeSelector({
   attendees,
   onUpdate,
 }: AttendeeSelectorProps) {
-  const [selectedSeniority, setSelectedSeniority] = useState(
-    salaryData[0].level,
+  const [selectedSeniority, setSelectedSeniority] = useState<string | null>(
+    null,
   );
   const [attendeeCount, setAttendeeCount] = useState(1);
 
   const addAttendees = () => {
+    if (!selectedSeniority) return;
+
     const existingIndex = attendees.findIndex(
       (a) => a.seniority === selectedSeniority,
     );
@@ -103,7 +103,9 @@ export function AttendeeSelector({
     }
   };
 
-  const getSeniorityTitle = (level: string) => {
+  const getSeniorityTitle = (level: string | null) => {
+    if (!level) return "Select Seniority";
+
     return salaryData.find((s) => s.level === level)?.title || level;
   };
 
@@ -112,25 +114,30 @@ export function AttendeeSelector({
       <h2 className="text-xl font-bold">Attendees</h2>
 
       <div className="flex flex-wrap gap-4 items-center justify-center">
-        <Dropdown>
-          <DropdownTrigger>
-            <Button size="lg" variant="bordered">
-              {getSeniorityTitle(selectedSeniority)}
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Seniority Levels"
-            selectedKeys={[selectedSeniority]}
-            selectionMode="single"
-            onAction={(key) => setSelectedSeniority(key as string)}
-          >
-            {salaryData.map((salary) => (
-              <DropdownItem key={salary.level} textValue={salary.title}>
-                {salary.title} (${salary.hourlyRate}/hr)
-              </DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
+        <Select
+          className="w-64"
+          label="Seniority"
+          selectedKeys={selectedSeniority ? [selectedSeniority] : []}
+          size="sm"
+          onSelectionChange={(keys) =>
+            setSelectedSeniority(Array.from(keys)[0] as string)
+          }
+        >
+          {salaryData.map((salary) => (
+            <SelectItem
+              key={salary.level}
+              endContent={
+                <Chip size="sm" variant="faded">
+                  {formatCurrency(salary.hourlyRate)}/hr
+                </Chip>
+              }
+              textValue={salary.title}
+              // value={salary.level}
+            >
+              {salary.title}
+            </SelectItem>
+          ))}
+        </Select>
 
         <Input
           className="w-24 h-12"
@@ -142,7 +149,12 @@ export function AttendeeSelector({
           onChange={(e) => setAttendeeCount(parseInt(e.target.value) || 1)}
         />
 
-        <Button color="primary" onPress={addAttendees}>
+        <Button
+          color="primary"
+          isDisabled={!selectedSeniority}
+          startContent={<UserIcon className="h-6 w-6 " />}
+          onPress={addAttendees}
+        >
           Add
         </Button>
       </div>

@@ -1,6 +1,7 @@
-import { Button, ButtonGroup } from "@heroui/button";
+import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
+import { Tabs, Tab } from "@heroui/tabs";
 
 import { TimerDisplay } from "./TimerDisplay";
 import { TimerIcon } from "./icons/TimerIcon";
@@ -32,20 +33,32 @@ export function MeetingDuration({
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Duration</h2>
 
-        <ButtonGroup>
-          <Button
-            color={durationMode === "timer" ? "primary" : "default"}
-            onPress={() => onChangeDurationMode("timer")}
-          >
-            <TimerIcon isSelected={durationMode === "timer"} />
-          </Button>
-          <Button
-            color={durationMode === "manual" ? "primary" : "default"}
-            onPress={() => onChangeDurationMode("manual")}
-          >
-            <CursorIcon isSelected={durationMode === "manual"} />
-          </Button>
-        </ButtonGroup>
+        <Tabs
+          selectedKey={durationMode}
+          variant="solid"
+          onSelectionChange={(key) =>
+            onChangeDurationMode(key as "manual" | "timer")
+          }
+        >
+          <Tab
+            key="timer"
+            title={
+              <div className="flex items-center gap-2">
+                <TimerIcon isSelected={false} />
+                Timer
+              </div>
+            }
+          />
+          <Tab
+            key="manual"
+            title={
+              <div className="flex items-center gap-2">
+                <CursorIcon isSelected={false} />
+                Manual
+              </div>
+            }
+          />
+        </Tabs>
       </div>
 
       {durationMode === "manual" ? (
